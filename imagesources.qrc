@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Images/folder.png</file>
+        <file>Images/hyst.png</file>
+        <file>Images/Save.png</file>
+        <file>Images/SaveStart.png</file>
+        <file>Images/On.png</file>
+        <file>Images/OFF.png</file>
+        <file>Images/Play.png</file>
+        <file>Images/Stop.png</file>
+        <file>Images/Acq.png</file>
+        <file>Images/Analysis.png</file>
+        <file>Images/settings.jpg</file>
+        <file>Images/logo.png</file>
+    </qresource>
+</RCC>

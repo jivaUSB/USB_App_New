@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>Images/pause.png</file>
+        <file>Images/hyst.png</file>
+        <file>Images/play.png</file>
+        <file>Images/Save.png</file>
+        <file>Images/SaveStart.png</file>
+        <file>Images/settings.jpg</file>
+        <file>Images/folder.png</file>
+        <file>Images/jivalog_10per.png</file>
+    </qresource>
+</RCC>

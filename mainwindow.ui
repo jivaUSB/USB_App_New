@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1920</width>
+    <height>1080</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>715</width>
+    <height>463</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Bio Data Analyzer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Images/jivalog_10per.png</normaloff>Images/jivalog_10per.png</iconset>
+  </property>
+  <property name="windowOpacity">
+   <double>60.000000000000000</double>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(143, 143, 143);</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <widget class="QFrame" name="Menu">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>130</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black; </string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QGraphicsView" name="m_logo">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>121</width>
+         <height>130</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">image: url(:/Images/Jivalog.png);
+background-image: url(:/Images/logo.png);
+
+</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="m_bDataAcq">
+       <property name="geometry">
+        <rect>
+         <x>135</x>
+         <y>25</y>
+         <width>110</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius: 10px;
+background-image: url(:/Images/OFF.png);
+
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QGraphicsView" name="On_off_buttons">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>0</y>
+         <width>291</width>
+         <height>130</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Data_acq_txt">
+       <property name="geometry">
+        <rect>
+         <x>135</x>
+         <y>5</y>
+         <width>101</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 0px solid black; </string>
+       </property>
+       <property name="text">
+        <string>Data Acquisition</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Data_anay_txt">
+       <property name="geometry">
+        <rect>
+         <x>135</x>
+         <y>65</y>
+         <width>101</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 0px solid black; </string>
+       </property>
+       <property name="text">
+        <string>Data Analysis</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="m_bDataAna">
+       <property name="geometry">
+        <rect>
+         <x>135</x>
+         <y>85</y>
+         <width>110</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius: 10px;
+background-image: url(:/Images/OFF.png);
+
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="m_bDataAcqPlay">
+       <property name="geometry">
+        <rect>
+         <x>285</x>
+         <y>25</y>
+         <width>110</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius: 10px;
+background-image: url(:/Images/Play.png);
+
+
+
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Acq_play_txt">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>5</y>
+         <width>101</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 0px solid black; </string>
+       </property>
+       <property name="text">
+        <string>Play</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="m_bCurDisplay">
+       <property name="geometry">
+        <rect>
+         <x>285</x>
+         <y>85</y>
+         <width>110</width>
+         <height>35</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius: 10px;
+background-image: url(:/Images/Acq.png);
+
+
+
+
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_9">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>65</y>
+         <width>101</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 0px solid black; </string>
+       </property>
+       <property name="text">
+        <string>Display Now</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="widget_LED_Setting" native="true">
+       <property name="geometry">
+        <rect>
+         <x>410</x>
+         <y>0</y>
+         <width>111</width>
+         <height>130</height>
+        </rect>
+       </property>
+       <widget class="QPushButton" name="m_USB_Link_Led">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>6</y>
+          <width>20</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: red;
+ border-style: solid;
+ border-width:2px;
+ border-radius:8px;
+ border-color: black;
+ max-width:16px;
+ max-height:16px;
+ min-width:16px;
+ min-height:16px;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="m_Uart_Link_LED">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>34</y>
+          <width>20</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: red;
+ border-style: solid;
+ border-width:2px;
+ border-radius:8px;
+ border-color: black;
+ max-width:16px;
+ max-height:16px;
+ min-width:16px;
+ min-height:16px;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="USB_link_txt">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>5</y>
+          <width>51</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-color: rgb(255, 255, 255);
+border:0px;
+font: 75 8pt &quot;MS Shell Dlg 2&quot;;</string>
+        </property>
+        <property name="text">
+         <string>USB Link</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="m_UART_link_txt">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>33</y>
+          <width>61</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-color: rgb(255, 255, 255);
+border:0px;</string>
+        </property>
+        <property name="text">
+         <string>UART Link</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="m_bSettings">
+        <property name="geometry">
+         <rect>
+          <x>35</x>
+          <y>82</y>
+          <width>40</width>
+          <height>40</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/Images/settings.jpg);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="Settings_txt">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>60</y>
+          <width>51</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 0px solid black; </string>
+        </property>
+        <property name="text">
+         <string>Settings</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QScrollArea" name="console_scroll_area">
+       <property name="geometry">
+        <rect>
+         <x>520</x>
+         <y>1</y>
+         <width>1381</width>
+         <height>130</height>
+        </rect>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1379</width>
+          <height>128</height>
+         </rect>
+        </property>
+        <widget class="QTextEdit" name="console">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>1381</width>
+           <height>130</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0);
+color:green;
+font: 75 12pt &quot;Calibri&quot;;</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+      <zorder>widget_LED_Setting</zorder>
+      <zorder>On_off_buttons</zorder>
+      <zorder>m_logo</zorder>
+      <zorder>Data_acq_txt</zorder>
+      <zorder>Data_anay_txt</zorder>
+      <zorder>m_bDataAcq</zorder>
+      <zorder>m_bDataAna</zorder>
+      <zorder>m_bDataAcqPlay</zorder>
+      <zorder>Acq_play_txt</zorder>
+      <zorder>m_bCurDisplay</zorder>
+      <zorder>label_9</zorder>
+      <zorder>console_scroll_area</zorder>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QStackedWidget" name="m_stacked">
+      <widget class="QWidget" name="page"/>
+      <widget class="QWidget" name="page_2"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
