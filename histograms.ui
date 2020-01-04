@@ -183,7 +183,7 @@ color: rgb(0, 0, 0);</string>
        <property name="geometry">
         <rect>
          <x>11</x>
-         <y>90</y>
+         <y>110</y>
          <width>51</width>
          <height>17</height>
         </rect>
@@ -209,7 +209,7 @@ color: rgb(0, 0, 0);</string>
        <property name="geometry">
         <rect>
          <x>11</x>
-         <y>110</y>
+         <y>90</y>
          <width>51</width>
          <height>17</height>
         </rect>
@@ -232,7 +232,7 @@ color: rgb(0, 0, 0);</string>
        <property name="geometry">
         <rect>
          <x>70</x>
-         <y>110</y>
+         <y>90</y>
          <width>92</width>
          <height>16</height>
         </rect>
@@ -338,7 +338,7 @@ font: 87 8pt &quot;Arial Black&quot;;</string>
        <property name="geometry">
         <rect>
          <x>70</x>
-         <y>90</y>
+         <y>110</y>
          <width>76</width>
          <height>16</height>
         </rect>
@@ -1034,13 +1034,55 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="m_bUTISet">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>70</y>
+         <width>50</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Set</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="m_bUPISet">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>130</y>
+         <width>50</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Set</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="m_bSumOfIntTTSet">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>190</y>
+         <width>50</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Set</string>
+       </property>
+      </widget>
      </widget>
+     <zorder>frame_2</zorder>
+     <zorder>m_fCellDataCounter</zorder>
+     <zorder>m_fLASERTriggerParams</zorder>
     </widget>
    </item>
    <item row="3" column="2">
-    <widget class="QScrollArea" name="scrollArea_4">
+    <widget class="QScrollArea" name="TT_window">
      <property name="styleSheet">
-      <string notr="true">border: 2px solid black</string>
+      <string notr="true">border: 0px solid black</string>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -1050,15 +1092,90 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>816</width>
-        <height>493</height>
+        <width>820</width>
+        <height>497</height>
        </rect>
       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QCustomPlot" name="tt_histo" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 0.5px solid black;</string>
+         </property>
+         <widget class="QLineEdit" name="tt_Median">
+          <property name="geometry">
+           <rect>
+            <x>75</x>
+            <y>15</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0.0px solid black;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgba(0, 0, 0, 20);
+color: rgb(0, 0, 0);
+
+</string>
+          </property>
+          <property name="text">
+           <string>M:0</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="tt_Dev">
+          <property name="geometry">
+           <rect>
+            <x>75</x>
+            <y>30</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0.0px solid black;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgba(0, 0, 0, 20);
+color: rgb(0, 0, 0);
+
+</string>
+          </property>
+          <property name="text">
+           <string>D:0</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="QScrollArea" name="area_window">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -1069,7 +1186,7 @@ p, li { white-space: pre-wrap; }
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border: 2px solid black</string>
+      <string notr="true">border: 0px solid black</string>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -1079,17 +1196,121 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>816</width>
-        <height>494</height>
+        <width>820</width>
+        <height>498</height>
        </rect>
       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QCustomPlot" name="area_histo" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 0.5px solid black;</string>
+         </property>
+         <widget class="QLineEdit" name="area_Median">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="geometry">
+           <rect>
+            <x>75</x>
+            <y>15</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0.0px solid black;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgba(0, 0, 0, 20);
+color: rgb(0, 0, 0);
+</string>
+          </property>
+          <property name="text">
+           <string>M:0</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="area_Dev">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="geometry">
+           <rect>
+            <x>75</x>
+            <y>30</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>8</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::ActionsContextMenu</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0.0px solid black;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgba(0, 0, 0, 20);
+color: rgb(0, 0, 0);
+
+</string>
+          </property>
+          <property name="text">
+           <string>D:0</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
    <item row="2" column="2">
-    <widget class="QScrollArea" name="scrollArea_2">
+    <widget class="QScrollArea" name="peak_window">
      <property name="styleSheet">
-      <string notr="true">border: 2px solid black</string>
+      <string notr="true">border: 0px solid black</string>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -1099,10 +1320,89 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>816</width>
-        <height>494</height>
+        <width>820</width>
+        <height>498</height>
        </rect>
       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QCustomPlot" name="peak_histo" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <stylestrategy>NoAntialias</stylestrategy>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 0.5px solid black;</string>
+         </property>
+         <widget class="QLineEdit" name="peak_Median">
+          <property name="geometry">
+           <rect>
+            <x>75</x>
+            <y>15</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0.0px solid black;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgba(0, 0, 0, 20);
+color: rgb(0, 0, 0);
+</string>
+          </property>
+          <property name="text">
+           <string>M:0</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="peak_Dev">
+          <property name="geometry">
+           <rect>
+            <x>75</x>
+            <y>30</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0.0px solid black;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgba(0, 0, 0, 20);
+color: rgb(0, 0, 0);
+
+</string>
+          </property>
+          <property name="text">
+           <string>D:0</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
@@ -1116,7 +1416,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="minimumSize">
       <size>
-       <width>720</width>
+       <width>820</width>
        <height>55</height>
       </size>
      </property>
@@ -1232,7 +1532,7 @@ border: 2px solid black
      <widget class="QCheckBox" name="m_cbTextFileSave">
       <property name="geometry">
        <rect>
-        <x>590</x>
+        <x>710</x>
         <y>10</y>
         <width>87</width>
         <height>16</height>
@@ -1506,7 +1806,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="m_vUpdateFreq">
+     <widget class="QSpinBox" name="m_vUpdateFreq">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -1515,38 +1815,63 @@ p, li { white-space: pre-wrap; }
         <height>17</height>
        </rect>
       </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
       </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+      <property name="minimum">
+       <number>25</number>
+      </property>
+      <property name="maximum">
+       <number>10000000</number>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="m_channel_1">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>10</y>
+        <width>82</width>
+        <height>17</height>
+       </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: rgb(0, 0, 0);</string>
+       <string notr="true">border: 0px solid black;
+text-decoration: underline;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(0, 0, 0);</string>
       </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+      <property name="text">
+       <string>Channel - 1</string>
       </property>
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+      <property name="checked">
+       <bool>true</bool>
       </property>
-      <property name="html">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </widget>
+     <widget class="QRadioButton" name="m_channel_2">
+      <property name="geometry">
+       <rect>
+        <x>580</x>
+        <y>30</y>
+        <width>82</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 0px solid black;
+text-decoration: underline;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(0, 0, 0);</string>
+      </property>
+      <property name="text">
+       <string>Channel - 2</string>
       </property>
      </widget>
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QScrollArea" name="scrollArea_3">
+    <widget class="QScrollArea" name="intencity_window">
      <property name="styleSheet">
-      <string notr="true">border: 2px solid black</string>
+      <string notr="true">border: 0px solid black</string>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -1556,21 +1881,125 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>816</width>
-        <height>493</height>
+        <width>820</width>
+        <height>497</height>
        </rect>
       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QCustomPlot" name="intensity_histo" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 0.5px solid black;</string>
+         </property>
+         <widget class="QLineEdit" name="intensity_Dev">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="geometry">
+           <rect>
+            <x>75</x>
+            <y>15</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0.0px solid black;
+background-color: rgba(0, 0, 0, 20);
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string>D:0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="intensity_Median">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="geometry">
+           <rect>
+            <x>75</x>
+            <y>30</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 0.0px solid black;
+font: 8pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgba(0, 0, 0, 20);
+color: rgb(0, 0, 0);
+</string>
+          </property>
+          <property name="text">
+           <string>M:0</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
   </layout>
-  <zorder>scrollArea</zorder>
-  <zorder>scrollArea_2</zorder>
-  <zorder>scrollArea_4</zorder>
-  <zorder>scrollArea_3</zorder>
   <zorder>m_histoSettings</zorder>
   <zorder>frame</zorder>
+  <zorder>area_window</zorder>
+  <zorder>peak_window</zorder>
+  <zorder>TT_window</zorder>
+  <zorder>intencity_window</zorder>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -311,6 +311,7 @@ public:
         m_comboBoxBaudRate->addItem(QString());
         m_comboBoxBaudRate->addItem(QString());
         m_comboBoxBaudRate->addItem(QString());
+        m_comboBoxBaudRate->addItem(QString());
         m_comboBoxBaudRate->setObjectName(QString::fromUtf8("m_comboBoxBaudRate"));
 
         gridLayout_2->addWidget(m_comboBoxBaudRate, 23, 0, 1, 1);
@@ -321,7 +322,7 @@ public:
         QObject::connect(buttonBox, SIGNAL(rejected()), settings, SLOT(reject()));
 
         m_comboBoxComPort->setCurrentIndex(-1);
-        m_comboBoxBaudRate->setCurrentIndex(4);
+        m_comboBoxBaudRate->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(settings);
@@ -352,6 +353,7 @@ public:
         m_comboBoxBaudRate->setItemText(2, QApplication::translate("settings", "38400", nullptr));
         m_comboBoxBaudRate->setItemText(3, QApplication::translate("settings", "57600", nullptr));
         m_comboBoxBaudRate->setItemText(4, QApplication::translate("settings", "115200", nullptr));
+        m_comboBoxBaudRate->setItemText(5, QApplication::translate("settings", "1152000", nullptr));
 
     } // retranslateUi
 

@@ -5,17 +5,14 @@
 #include "serialcommunication.h"
 #include "logger.h"
 #include <types.h>
-
-histoData h_data;
+#include <QThread>
 
 using namespace std;
 serialCommunication::serialCommunication()
 {
     m_device = make_shared<QSerialPort>();
     m_isRunning = false;
-    h_data.isCounterOn = false;
-
-    clearProcessData();
+    m_channel = 0xab01;
 }
 
 serialCommunication::~serialCommunication()
@@ -24,68 +21,89 @@ serialCommunication::~serialCommunication()
 }
 void serialCommunication::parser(void)
 {
-    clearProcessData();
+    enum READ_STATE {
+        HEADER,
+        CHANNEL,
+        PEAK_0,
+        PEAK_1,
+        AREA_0,
+        AREA_1,
+        AREA_2,
+        AREA_3,
+        TT_0,
+        TT_1,
+        STATUS
+    };
 
-    auto *ptr_read_data = new read_metaData();
-
+    serialReadData fetched_data;
+    READ_STATE current_state = HEADER;
     while (m_isRunning)
     {
-        Sleep(2);
-        ptr_read_data->clear();
-        ptr_read_data->len = 2;
-        readData(ptr_read_data);
-
-        if(ptr_read_data->actual_read  == ptr_read_data->len)
+        QThread::usleep(100);
+        std::lock_guard<std::mutex> guard(m_lock);
+        std::vector<uint8_t> buffer;
+        auto buff = m_device->readAll();
+        buffer.insert(buffer.end(),buff.begin(),buff.end());
+        uint32_t availableSize = buffer.size();
+        uint32_t pointer = 0;
+        while(availableSize > pointer)
         {
-            uint16_t header = ptr_read_data->buffer[0];
-            header = ((header << 8) | ptr_read_data->buffer[1]);
+            switch (current_state) {
+            case HEADER:
+                if(buffer[pointer++] == ((m_channel >> 8) & 0xff))
+                    current_state = CHANNEL;
+                break;
+            case CHANNEL:
+                if(buffer[pointer++] == (m_channel & 0xff))
+                    current_state = PEAK_0;
+                break;
+            case PEAK_0:
+                fetched_data.m_peak = buffer[pointer++];
+                current_state = PEAK_1;
+                break;
+            case PEAK_1:
+                fetched_data.m_peak = (((uint32_t)fetched_data.m_peak << 8) | buffer[pointer++]);
+                current_state = AREA_0;
+                break;
+            case AREA_0:
+                fetched_data.m_area = buffer[pointer++];
+                current_state = AREA_1;
+                break;
+            case AREA_1:
+                fetched_data.m_area = (((uint32_t)fetched_data.m_area << 8) | buffer[pointer++]);
+                current_state = AREA_2;
+                break;
+            case AREA_2:
+                fetched_data.m_area = (((uint32_t)fetched_data.m_area << 8) | buffer[pointer++]);
+                current_state = AREA_3;
+                break;
+            case AREA_3:
+                fetched_data.m_area = (((uint32_t)fetched_data.m_area << 8) | buffer[pointer++]);
+                current_state = TT_0;
+                break;
+            case TT_0:
+                fetched_data.m_transmitTime = buffer[pointer++];
+                current_state = TT_1;
+                break;
+            case TT_1:
+                fetched_data.m_transmitTime = (((uint32_t)fetched_data.m_transmitTime << 8) | buffer[pointer++]);
+                fetched_data.m_intencity = fetched_data.m_area/fetched_data.m_transmitTime;
+                current_state = STATUS;
+                break;
+            case STATUS:
+                fetched_data.m_status = buffer[pointer++];
 
-            if(header == 0x3301)
-            {
-                uint16_t transmitTime = 0;
-                ptr_read_data->clear();
-                ptr_read_data->len = 2;
-                readData(ptr_read_data);
-                if(ptr_read_data->actual_read  == ptr_read_data->len)
-                {
-                    uint16_t peak = ptr_read_data->buffer[0];
-                    peak = ((peak << 8) | ptr_read_data->buffer[1]);
-                    h_data.m_peak.push_back(static_cast<double>(peak));
-                }
-                ptr_read_data->clear();
-                ptr_read_data->len = 2;
-                readData(ptr_read_data);
-                if(ptr_read_data->actual_read  == ptr_read_data->len)
-                {
-                    transmitTime = 0;
-                    transmitTime = ptr_read_data->buffer[0];
-                    transmitTime = ((transmitTime << 8) | ptr_read_data->buffer[1]);
-                    h_data.m_transmitTime.push_back(static_cast<double>(transmitTime));
-                }
-                ptr_read_data->clear();
-                ptr_read_data->len = 4;
-                readData(ptr_read_data);
-                if(ptr_read_data->actual_read  == ptr_read_data->len)
-                {
-                    uint32_t area = ptr_read_data->buffer[0];
-                    area = ((area << 8) | ptr_read_data->buffer[1]);
-                    area = ((area << 8) | ptr_read_data->buffer[2]);
-                    area = ((area << 8) | ptr_read_data->buffer[3]);
-                    h_data.m_area.push_back(static_cast<double>(area));
-                    h_data.m_intencity.push_back(static_cast<double>(area/transmitTime));
-                }
+                //                printf("peak : 0x%X\n", (uint16_t)fetched_data.m_peak);
+                //                printf("area : 0x%X\n", (uint32_t)fetched_data.m_area);
+                //                printf("TT : 0x%X\n", (uint16_t)fetched_data.m_transmitTime);
+                //                printf("Intensity : 0x%X\n", (uint16_t)fetched_data.m_intencity);
+                //                printf("Status : 0x%X\n", (uint8_t)fetched_data.m_status);
+                //                buffer.erase(buffer.begin(), buffer.begin() + pointer);
 
-#if 1
-                ptr_read_data->clear();
-                ptr_read_data->len = 1;
-                readData(ptr_read_data);
-                if(ptr_read_data->actual_read  == ptr_read_data->len)
-                {
-                   h_data.m_status.push_back(ptr_read_data->buffer[0]);
-                   parseStatus(ptr_read_data->buffer[0]);
-                }
-#endif
-            }
+                m_updateReadData(&fetched_data);
+                current_state = HEADER;
+                break;
+            };
         }
     }
 }
@@ -107,7 +125,10 @@ bool serialCommunication::Initialization()
     if(m_device)
     {
         m_device->setPortName(m_serial_configurations->getPortName());
-        m_device->setBaudRate(m_serial_configurations->getBaudRate());
+        if(m_serial_configurations->getBaudRate() == QSerialPort::Baud4800)
+            m_device->setBaudRate(1152000);
+        else
+            m_device->setBaudRate(m_serial_configurations->getBaudRate());
         m_device->setDataBits(m_serial_configurations->getDataBits());
         m_device->setParity(m_serial_configurations->getParity());
         m_device->setStopBits(m_serial_configurations->getStopBit());
@@ -115,11 +136,7 @@ bool serialCommunication::Initialization()
 
         if(m_device->open(QIODevice::ReadWrite))
         {
-            if(cGetSerialStatus())
-            {
-                ret = m_isRunning =  true;
-                parserThread = std::thread(std::bind(&serialCommunication::parser,this));
-            }
+            ret = cGetSerialStatus(true);
         }
         else
         {
@@ -131,7 +148,6 @@ bool serialCommunication::Initialization()
 
 void serialCommunication::readData(read_metaData *ptr_read_data)
 {
-   std::lock_guard<std::mutex> guard(m_lock);
    if(m_device && ptr_read_data)
    {
        if(m_device->isOpen())
@@ -148,6 +164,7 @@ void serialCommunication::clean(bool isInt)
 {
     m_isRunning =  false;
     parserThread.join();
+    cGetSerialStatus(false);
     m_device->close();
 }
 
@@ -173,6 +190,9 @@ std::string serialCommunication::GetBaudRateStr(QSerialPort::BaudRate baudrate)
         break;
     case QSerialPort::Baud115200:
         retStr = "115200";
+        break;
+    case QSerialPort::Baud4800:
+        retStr = "1152000";
         break;
     }
     return  retStr;
@@ -215,23 +235,6 @@ std::string serialCommunication::GetDataBitsStr(QSerialPort::DataBits databits)
     return  retStr;
 }
 
-void serialCommunication::clearProcessData(void)
-{
-    h_data.m_area.clear();
-    h_data.m_peak.clear();
-    h_data.m_intencity.clear();
-    h_data.m_transmitTime.clear();
-
-    h_data.m_xCellCount = 0;
-    h_data.m_yCellCount = 0;
-    h_data.m_multiCellCount = 0;
-    h_data.m_totalCellCount = 0;
-
-    h_data.m_area.reserve(1024*1024*10);
-    h_data.m_peak.reserve(1024*1024*10);
-    h_data.m_intencity.reserve(1024*1024*10);
-    h_data.m_intencity.reserve(1024*1024*10);
-}
 void serialCommunication::registerForData(dataCallback_t callback)
 {
     m_dataCallback = callback;
@@ -243,71 +246,28 @@ void serialCommunication::setSettingIntf(SettingsPtr settingsIntf)
     m_settings = settingsIntf;
 }
 
-void serialCommunication::getData(dataType type)
-{
-    if(type == AREA && h_data.m_area.size())
-    {
-         //return m_area;
-    }
-    else if(type == PEAK && h_data.m_peak.size())
-    {
-         //return m_peak;
-    }
-    else if(type == TT && h_data.m_transmitTime.size())
-    {
-         //return m_transmitTime;
-    }
-    else if(type == INTENCITY && h_data.m_intencity.size())
-    {
-         //return m_intencity;
-    }
-}
-
-void serialCommunication::parseStatus(uint8_t status)
-{
-    if(h_data.isCounterOn)
-    {
-        switch (status & 0x07) {
-        default:
-            break;
-        case  X_CELL:
-            h_data.m_xCellCount++;
-            break;
-        case  Y_CELL:
-            h_data.m_yCellCount++;
-            break;
-        case  MULTIPLIES_CELL:
-            h_data.m_multiCellCount++;
-            break;
-
-        }
-
-        h_data.m_totalCellCount = h_data.m_xCellCount +
-                h_data.m_yCellCount + h_data.m_multiCellCount;
-    }
-}
 int serialCommunication::sendCommand(t_serialCommand *commandMetaData)
 {
-    int ret = -1;
     std::lock_guard<std::mutex> guard(m_lock);
+    int ret = -1;
     if ( (commandMetaData != nullptr) && (m_device) )
     {
         std::vector<uint8_t> packet;
         packet.push_back(commandMetaData->command_id);
-        //packet.push_back(commandMetaData->command_len);
 
         if(commandMetaData->command_len == commandMetaData->commandBuffer.size())
         {
+            m_device->clear();
             packet.insert(packet.end(),commandMetaData->commandBuffer.begin(),commandMetaData->commandBuffer.end());
             if( m_device->write((char *)packet.data(), packet.size()) )
             {
                 m_device->waitForBytesWritten();
                 if(commandMetaData->command_resp_len)
                 {
+                    m_device->waitForReadyRead();
                     commandMetaData->respBuffer.clear();
                     commandMetaData->respBuffer.resize(commandMetaData->command_resp_len);
 
-                    m_device->waitForReadyRead();
                     if ( m_device->read((char *)&commandMetaData->respBuffer[0], commandMetaData->command_resp_len))
                         ret = 0;
                 }
@@ -315,7 +275,6 @@ int serialCommunication::sendCommand(t_serialCommand *commandMetaData)
                     ret = 0;
             }
         }
-
     }
     return ret;
 }
@@ -329,7 +288,9 @@ int serialCommunication::cGetADCInstValue(void)
     command.command_resp_len = 0x03;
     if (!sendCommand(&command))
     {
-        if(command.respBuffer.size() == command.command_resp_len)
+        if(command.command_resp_len == 0)
+            ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
         {
             if(command.respBuffer[0] == command.command_id)
             {
@@ -341,17 +302,19 @@ int serialCommunication::cGetADCInstValue(void)
     return ret;
 }
 
-bool serialCommunication::cGetSerialStatus(void)
+bool serialCommunication::cGetSerialStatus(bool enable)
 {
     bool ret = false;
 
     t_serialCommand command;
-    command.command_id = 0xf1;
+    command.command_id = (enable) ? 0xf1 : 0xf7;
     command.command_len = 0x00;
     command.command_resp_len = 0x01;
     if (!sendCommand(&command))
     {
-        if(command.respBuffer.size() == command.command_resp_len)
+        if (command.command_resp_len == 0)
+            ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
         {
             ret = (command.command_id == command.respBuffer[0]) ? true : false;
         }
@@ -366,14 +329,193 @@ bool serialCommunication::cSetEventThr(int val)
     command.command_id = 0xef;
     command.command_len = 0x02;
     command.command_resp_len = 0x01;
-    command.commandBuffer.push_back((uint8_t)val);
     command.commandBuffer.push_back((uint8_t)((val >> 8) & 0xff));
+    command.commandBuffer.push_back((uint8_t)val);
+
     if (!sendCommand(&command))
     {
-        if(command.respBuffer.size() == command.command_resp_len)
+        if (command.command_resp_len == 0)
+            ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
         {
             ret = (command.respBuffer[0] == command.command_id) ? true : false;
         }
     }
     return ret;
+}
+
+void serialCommunication::registerForData(std::function<void(struct serialReadData *)> cbDataCallback)
+{
+    m_updateReadData = cbDataCallback;
+}
+
+bool serialCommunication::cEnabledHisto(bool enabled)
+{
+    bool ret = false;
+
+    t_serialCommand command;
+    command.command_id = (enabled) ? 0xf9:0xf8;
+    command.command_len = 0x00;
+    command.command_resp_len = 0x01;
+    if (!sendCommand(&command))
+    {
+        if (command.command_resp_len == 0 || !enabled)
+             ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
+        {
+            ret = (command.command_id == command.respBuffer[0]) ? true : false;
+        }
+
+        if(ret)
+        {
+            m_isRunning = enabled;
+            if(enabled)
+               parserThread = std::thread(std::bind(&serialCommunication::parser,this));
+            else
+               parserThread.join();
+        }
+    }
+    return ret;
+}
+
+bool serialCommunication::cSetTTThr(int upperThr, int lowerThr)
+{
+    bool ret = true;
+    t_serialCommand command;
+    command.command_id = 0xee;
+    command.command_len = 0x04;
+    command.command_resp_len = 0x00;
+
+    command.commandBuffer.push_back((uint8_t)((lowerThr >> 8) & 0xff));
+    command.commandBuffer.push_back((uint8_t)lowerThr);
+
+    command.commandBuffer.push_back((uint8_t)((upperThr >> 8) & 0xff));
+    command.commandBuffer.push_back((uint8_t)upperThr);
+
+    if (!sendCommand(&command))
+    {
+        if (command.command_resp_len == 0)
+             ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
+        {
+            ret = (command.respBuffer[0] == command.command_id) ? true : false;
+        }
+    }
+    return ret;
+}
+
+bool serialCommunication::cEnabledTTThr(bool enable)
+{
+    bool ret = true;
+
+    t_serialCommand command;
+    command.command_id = (enable) ? 0xE8:0xED;
+    command.command_len = 0x00;
+    command.command_resp_len = 0x00;
+    if (!sendCommand(&command))
+    {
+        if(command.command_resp_len == 0)
+            ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
+        {
+            ret = (command.command_id == command.respBuffer[0]) ? true : false;
+        }
+    }
+    return ret;
+}
+
+bool serialCommunication::cSetAblationThr(int val)
+{
+    bool ret = true;
+    t_serialCommand command;
+    command.command_id = 0xec;
+    command.command_len = 0x04;
+    command.command_resp_len = 0x00;
+
+    command.commandBuffer.push_back((uint8_t)((val >> 24) & 0xff));
+    command.commandBuffer.push_back((uint8_t)((val >> 16) & 0xff));
+    command.commandBuffer.push_back((uint8_t)((val >> 8) & 0xff));
+    command.commandBuffer.push_back((uint8_t)val);
+
+    if (!sendCommand(&command))
+    {
+        if (command.command_resp_len == 0)
+            ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
+        {
+            ret = (command.respBuffer[0] == command.command_id) ? true : false;
+        }
+    }
+    return ret;
+}
+
+bool serialCommunication::cEnabledAblationThr(bool enable)
+{
+    bool ret = true;
+
+    t_serialCommand command;
+    command.command_id = (enable) ? 0xE7:0xEB;
+    command.command_len = 0x00;
+    command.command_resp_len = 0x00;
+    if (!sendCommand(&command))
+    {
+        if(command.command_resp_len == 0)
+            ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
+        {
+            ret = (command.command_id == command.respBuffer[0]) ? true : false;
+        }
+    }
+    return ret;
+}
+
+bool serialCommunication::cSetPeakIntensityThr(int upperThr, int lowerThr)
+{
+    bool ret = true;
+    t_serialCommand command;
+    command.command_id = 0xea;
+    command.command_len = 0x04;
+    command.command_resp_len = 0x00;
+
+    command.commandBuffer.push_back((uint8_t)((lowerThr >> 8) & 0xff));
+    command.commandBuffer.push_back((uint8_t)lowerThr);
+
+    command.commandBuffer.push_back((uint8_t)((upperThr >> 8) & 0xff));
+    command.commandBuffer.push_back((uint8_t)upperThr);
+
+    if (!sendCommand(&command))
+    {
+        if(command.command_resp_len == 0)
+            ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
+        {
+            ret = (command.respBuffer[0] == command.command_id) ? true : false;
+        }
+    }
+    return ret;
+}
+
+bool serialCommunication::cEnabledPeakIntensityThr(bool enable)
+{
+    bool ret = true;
+
+    t_serialCommand command;
+    command.command_id = (enable) ? 0xE6:0xE9;
+    command.command_len = 0x00;
+    command.command_resp_len = 0x00;
+    if (!sendCommand(&command))
+    {
+        if(command.command_resp_len == 0)
+            ret = true;
+        else if(command.respBuffer.size() == command.command_resp_len)
+        {
+            ret = (command.command_id == command.respBuffer[0]) ? true : false;
+        }
+    }
+    return ret;
+}
+
+void serialCommunication::setCurrentChannel(uint16_t channel)
+{
+    m_channel = channel;
 }

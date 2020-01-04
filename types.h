@@ -2,6 +2,8 @@
 #define TYPES_H
 
 #include<QVector>
+#include<functional>
+#include<tuple>
 
 enum buttonStatus
 {
@@ -20,18 +22,13 @@ enum buttonStatus
 #define ICON_CURR_DISPLAY_ACQ ":/Images/Acq"
 #define ICON_CURR_DISPLAY_ANALYSIS ":/Images/Analysis"
 
-struct histoData
+struct  serialReadData
 {
-    QVector<double>  m_peak;
-    QVector<double>  m_transmitTime;
-    QVector<double>  m_area;
-    QVector<double>  m_intencity;
-    QVector<uint8_t>  m_status;
-    uint32_t m_xCellCount;
-    uint32_t m_yCellCount;
-    uint32_t m_multiCellCount;
-    uint32_t m_totalCellCount;
-    bool isCounterOn;
+    uint32_t m_peak;
+    uint32_t m_transmitTime;
+    uint32_t m_area;
+    uint32_t m_intencity;
+    uint8_t m_status;
 };
 
 #endif // TYPES_H

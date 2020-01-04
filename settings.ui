@@ -432,7 +432,7 @@ color: rgb(236, 236, 236);</string>
    <item row="23" column="0">
     <widget class="QComboBox" name="m_comboBoxBaudRate">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <item>
       <property name="text">
@@ -457,6 +457,11 @@ color: rgb(236, 236, 236);</string>
      <item>
       <property name="text">
        <string>115200</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>1152000</string>
       </property>
      </item>
     </widget>

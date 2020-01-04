@@ -127,7 +127,6 @@ void MainWindow::DisplayNowClicked(void)
     {
            setButtonIcon(ICON_CURR_DISPLAY_ANALYSIS, qobject_cast<QPushButton*>(sender()));
            ui->m_stacked->setCurrentWidget(m_histo.getWidget());
-           m_histo.prepareShow(ui->centralWidget->size());
            ui->m_stacked->show();
     }
     else

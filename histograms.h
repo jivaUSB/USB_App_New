@@ -5,6 +5,8 @@
 #include "ui_histograms.h"
 #include "qcustomplot.h"
 #include <QObject>
+#include <QTimer>
+#include <fstream>
 
 #define DEFAULT_HEIGHT 300
 #define DEFAULT_WIDTH 620
@@ -13,6 +15,18 @@
 #define FULL_SCREEN_WIDTH 1320
 #define FULL_SCREEN_HEIGHT 690
 #define ZOOM_SCALE 150
+
+enum filterStatus
+{
+    FILTER_STATUS_NONE,
+    FILTER_STATUS_YES,
+    FILTER_STATUS_NO,
+    FILTER_STATUS_X,
+    FILTER_STATUS_Y,
+    FILTER_STATUS_MULTIPLE,
+    FILTER_STATUS_OUTLIER,
+    FILTER_STATUS_VALID
+};
 
 
 class histograms : public QWidget
@@ -23,6 +37,56 @@ class histograms : public QWidget
     CommunicationIF::Ptr m_device;
     std::thread displayThread;
     int m_intADCValue;
+    QTimer *m_tmp_timer;
+    bool isEnableHisto;
+    std::ofstream m_reportFile;
+    uint32_t m_point;
+    int32_t m_totalEvents;
+    uint32_t m_updateFreq;
+    uint32_t m_containerCount;
+    uint32_t expStartTime;
+    uint32_t expStopTime;
+
+    string m_headerStartOfRecodrd;
+    string m_expDetail;
+    string m_histoParameter;
+    string m_expDataDetail;
+    string m_fileterParameter;
+    string m_cellDataCounters;
+    string m_expStatic;
+    string m_expRunDetail;
+    string m_headerEndOfRecord;
+    string m_strReadings;
+
+    filterStatus m_transitTimeFilter;
+    filterStatus m_peakIntensityFilter;
+    filterStatus m_cellType;
+    filterStatus m_ablation_triggered;
+
+    QVector<uint32_t>  m_peak;
+    QVector<uint32_t>  m_transmitTime;
+    QVector<uint32_t>  m_area;
+    QVector<uint32_t>  m_intencity;
+    QVector<uint8_t>  m_status;
+
+    uint32_t m_xCellCount;
+    uint32_t m_yCellCount;
+    uint32_t m_multipleCellCount;
+    uint32_t m_totalCellCount;
+    uint32_t m_ablationFireCount;
+    bool isCounterOn;
+    bool isSetTTFilter;
+    bool isSetAblationFilter;
+    bool isSetPeakFilter;
+    bool updateSize;
+    QSize mainWindow_size;
+
+    void prepareFile(void);
+    void UpdateFile(void);
+    void UpdateReadingToFile(serialReadData *data);
+    void closeFile(void);
+
+
 
 public:
     explicit histograms(QWidget *parent = nullptr);
@@ -41,31 +105,11 @@ public:
         QCPBars *m_bar;
         QScrollArea *scrollArea;
         QString name;
-        int height;
-        int width;
-        int x_pos;
-        int y_pos;
-        int current_width;
-        int default_plot_height;
-        int default_plot_width;
-        int default_scroll_height;
-        int default_scroll_width;
-        int default_full_screen_height;
-        int default_full_screen_width;
+        QLineEdit *m_Dev;
+        QLineEdit *m_Median;
 
-        void updateSize(QSize mainwindowsize )
-        {
-            m_customPlot->setFixedSize(scrollArea->width(),scrollArea->height());
-            default_plot_height = m_customPlot->height();
-            default_plot_width = m_customPlot->width();
-            default_scroll_height = scrollArea->height();
-            default_scroll_width = scrollArea->width();
-            default_full_screen_height = mainwindowsize.height();
-            default_full_screen_width = mainwindowsize.width();
-            x_pos = m_customPlot->x();
-            y_pos = m_customPlot->y();
-            current_width = m_customPlot->width();
-        }
+
+        bool once;
 
         void zoom(int delta)
         {
@@ -80,37 +124,6 @@ public:
             {
                 m_customPlot->setFixedWidth(m_customPlot->width() + ZOOM_SCALE );
             }
-            current_width = m_customPlot->width();
-        }
-        bool fullscreen(void)
-        {
-            bool is_show = false;
-            if(scrollArea->height() != default_full_screen_height)
-            {
-                //std::cout << "full screen" << std::endl;
-                scrollArea->setGeometry(10,10,default_full_screen_width, default_full_screen_height);
-
-                show();
-                default_full_screen_height = scrollArea->height();
-                default_full_screen_width = scrollArea->width();
-                auto area_width = (current_width > default_full_screen_width) ? current_width : default_full_screen_width;
-                m_customPlot->move(10,10);
-
-                 m_customPlot->setFixedSize(area_width, default_full_screen_height - 25);
-                 //scrollArea->setGeometry(10,10,default_full_screen_width, default_full_screen_height);
-            }
-            else
-            {
-                  std::cout << default_scroll_width << ":" << default_scroll_height << std::endl;
-                  std::cout << default_scroll_width << ":" << default_scroll_height << std::endl;
-
-                scrollArea->setGeometry(x_pos,y_pos,default_scroll_width, default_scroll_height);
-                m_customPlot->move(x_pos,y_pos);
-                m_customPlot->setFixedSize(current_width, default_plot_height);
-
-                is_show = true;
-            }
-            return is_show;
         }
 
         void hide (void)
@@ -126,17 +139,11 @@ public:
         }
 
 public:
-        Draw(QScrollArea *scrollArea, QString chart_name) : scrollArea(scrollArea),height(scrollArea->geometry().size().height()),
-            width(scrollArea->geometry().size().width()), current_width(scrollArea->width()), name(chart_name)
+        Draw(QScrollArea *scrollArea, QCustomPlot *customPlot,QLineEdit *dev, QLineEdit *median, QString chart_name) : scrollArea(scrollArea),
+            name(chart_name), m_customPlot(customPlot), m_Dev(dev), m_Median(median)
 
         {
-            m_customPlot = new QCustomPlot;
-            m_customPlot->setFixedSize(width,height);
-
             m_bar = new QCPBars(m_customPlot->xAxis, m_customPlot->yAxis);
-            scrollArea->setWidget(m_customPlot);
-            scrollArea->setWidgetResizable(true);
-
             m_bar->setWidth(0.2);
             m_bar->setBrush(QColor("Blue"));
             m_customPlot->yAxis->setVisible(true);
@@ -145,27 +152,34 @@ public:
             m_bar->setAntialiased(false);
             m_customPlot->xAxis->setTickLabelRotation(60);
             m_customPlot->yAxis->setLabel(name);
-
-            x_pos = scrollArea->x();
-            y_pos = scrollArea->y();
-
-            m_customPlot->setDisabled(true);
+            once = true;
         }
     };
     Draw *areaDraw;
     Draw *intencityDraw;
     Draw *peakDraw;
     Draw *transitTimeDraw;
-public:
-    void displayArea(QVector<double> data = {});
-    void displayPeak( QVector<double> data = {});
-    void displayTransitTime(QVector<double> data ={});
-    void displayIntencity( QVector<double> data = {});
-    void processData(QSize mainwindow_size);
-    void prepareShow(QSize mainwindow_size);
 private:
-    void draw_histogram(Draw *draw_histo, QVector<double> &data);
+    void draw_histogram(Draw *draw_histo, QVector<uint32_t> &data);
     void displayCounter(void);
+    void updateHistogram(serialReadData *data);
+    void clear_histogram(Draw *draw_histo);
+
+    /**
+     * @brief parseStatus
+     * @param status
+     */
+    void parseStatus(uint8_t status);
+
+    /**
+     * @brief calculateStdDeviation
+     * @param data
+     * @return
+     */
+    std::tuple<double, double> calculateStdDeviation(QVector<double> &data);
+
+    bool updateValueInFile(std::string filename, std::string str, std::string derivative = ":");
+
 public slots:
     void mouseWheel(QWheelEvent *event);
     void mouseDoubleClickEvent( QMouseEvent * e );
@@ -174,7 +188,15 @@ public slots:
     void InstADCVal(void);
     void eventThreshold(void);
     void enableHisto(void);
-
+    void getUpdateFreq(int val);
+    void tmp_timer_expired(void);
+    void enableFilterTT(void);
+    void setFilterTT(void);
+    void enableFilterPeak(void);
+    void setFilterPeak(void);
+    void enableFilterAblation(void);
+    void setFilterAblation(void);
+    void channleChanged(void);
 };
 
 #endif // HISTOGRAMS_H

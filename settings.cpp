@@ -195,5 +195,8 @@ void settings::UpdateSerialConfiguration(void)
     case 4:
         setting_ptr->baudrate = QSerialPort::Baud115200;
         break;
+    case 5:
+        setting_ptr->baudrate = QSerialPort::Baud4800;
+        break;
     };
 }

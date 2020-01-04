@@ -15,10 +15,14 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
+#include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -66,12 +70,27 @@ public:
     QTextEdit *m_vUPIThreshold;
     QTextEdit *m_vLPIThreshold;
     QTextEdit *m_vSomTTThreshold;
-    QScrollArea *scrollArea_4;
+    QPushButton *m_bUTISet;
+    QPushButton *m_bUPISet;
+    QPushButton *m_bSumOfIntTTSet;
+    QScrollArea *TT_window;
     QWidget *scrollAreaWidgetContents_4;
-    QScrollArea *scrollArea;
+    QGridLayout *gridLayout_5;
+    QCustomPlot *tt_histo;
+    QLineEdit *tt_Median;
+    QLineEdit *tt_Dev;
+    QScrollArea *area_window;
     QWidget *scrollAreaWidgetContents;
-    QScrollArea *scrollArea_2;
+    QGridLayout *gridLayout_2;
+    QCustomPlot *area_histo;
+    QLineEdit *area_Median;
+    QLineEdit *area_Dev;
+    QScrollArea *peak_window;
     QWidget *scrollAreaWidgetContents_2;
+    QGridLayout *gridLayout_3;
+    QCustomPlot *peak_histo;
+    QLineEdit *peak_Median;
+    QLineEdit *peak_Dev;
     QWidget *m_histoSettings;
     QPushButton *m_bGetInstADCVal;
     QPushButton *m_bSetEventThr;
@@ -88,9 +107,15 @@ public:
     QLabel *m_labelEnableHisto;
     QTextEdit *m_vInstADCVal;
     QTextEdit *m_vEvtThrs;
-    QTextEdit *m_vUpdateFreq;
-    QScrollArea *scrollArea_3;
+    QSpinBox *m_vUpdateFreq;
+    QRadioButton *m_channel_1;
+    QRadioButton *m_channel_2;
+    QScrollArea *intencity_window;
     QWidget *scrollAreaWidgetContents_3;
+    QGridLayout *gridLayout_4;
+    QCustomPlot *intensity_histo;
+    QLineEdit *intensity_Dev;
+    QLineEdit *intensity_Median;
 
     void setupUi(QWidget *histograms)
     {
@@ -162,7 +187,7 @@ public:
 "color: rgb(0, 0, 0);"));
         m_vTotalCount = new QLabel(m_fCellDataCounter);
         m_vTotalCount->setObjectName(QString::fromUtf8("m_vTotalCount"));
-        m_vTotalCount->setGeometry(QRect(11, 90, 51, 17));
+        m_vTotalCount->setGeometry(QRect(11, 110, 51, 17));
         sizePolicy2.setHeightForWidth(m_vTotalCount->sizePolicy().hasHeightForWidth());
         m_vTotalCount->setSizePolicy(sizePolicy2);
         m_vTotalCount->setStyleSheet(QString::fromUtf8("border: 2px solid black;\n"
@@ -170,7 +195,7 @@ public:
         m_vAlbationFireCount = new QLabel(m_fCellDataCounter);
         m_vAlbationFireCount->setObjectName(QString::fromUtf8("m_vAlbationFireCount"));
         m_vAlbationFireCount->setEnabled(false);
-        m_vAlbationFireCount->setGeometry(QRect(11, 110, 51, 17));
+        m_vAlbationFireCount->setGeometry(QRect(11, 90, 51, 17));
         QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy3.setHorizontalStretch(0);
         sizePolicy3.setVerticalStretch(0);
@@ -180,7 +205,7 @@ public:
 "color: rgb(0, 0, 0);"));
         m_labelAlbationFireCount = new QLabel(m_fCellDataCounter);
         m_labelAlbationFireCount->setObjectName(QString::fromUtf8("m_labelAlbationFireCount"));
-        m_labelAlbationFireCount->setGeometry(QRect(70, 110, 92, 16));
+        m_labelAlbationFireCount->setGeometry(QRect(70, 90, 92, 16));
         QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy4.setHorizontalStretch(0);
         sizePolicy4.setVerticalStretch(0);
@@ -221,7 +246,7 @@ public:
         m_boxLabelCellData->setAlignment(Qt::AlignCenter);
         m_labelTotalCount = new QLabel(m_fCellDataCounter);
         m_labelTotalCount->setObjectName(QString::fromUtf8("m_labelTotalCount"));
-        m_labelTotalCount->setGeometry(QRect(70, 90, 76, 16));
+        m_labelTotalCount->setGeometry(QRect(70, 110, 76, 16));
         sizePolicy2.setHeightForWidth(m_labelTotalCount->sizePolicy().hasHeightForWidth());
         m_labelTotalCount->setSizePolicy(sizePolicy2);
         m_labelTotalCount->setStyleSheet(QString::fromUtf8("border: 0px solid black;\n"
@@ -426,49 +451,172 @@ public:
         m_vSomTTThreshold->setLayoutDirection(Qt::LeftToRight);
         m_vSomTTThreshold->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         m_vSomTTThreshold->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
+        m_bUTISet = new QPushButton(frame_2);
+        m_bUTISet->setObjectName(QString::fromUtf8("m_bUTISet"));
+        m_bUTISet->setGeometry(QRect(120, 70, 50, 17));
+        m_bUPISet = new QPushButton(frame_2);
+        m_bUPISet->setObjectName(QString::fromUtf8("m_bUPISet"));
+        m_bUPISet->setGeometry(QRect(120, 130, 50, 17));
+        m_bSumOfIntTTSet = new QPushButton(frame_2);
+        m_bSumOfIntTTSet->setObjectName(QString::fromUtf8("m_bSumOfIntTTSet"));
+        m_bSumOfIntTTSet->setGeometry(QRect(120, 190, 50, 17));
+        frame_2->raise();
+        m_fCellDataCounter->raise();
+        m_fLASERTriggerParams->raise();
 
         gridLayout->addWidget(frame, 0, 0, 5, 1);
 
-        scrollArea_4 = new QScrollArea(histograms);
-        scrollArea_4->setObjectName(QString::fromUtf8("scrollArea_4"));
-        scrollArea_4->setStyleSheet(QString::fromUtf8("border: 2px solid black"));
-        scrollArea_4->setWidgetResizable(true);
+        TT_window = new QScrollArea(histograms);
+        TT_window->setObjectName(QString::fromUtf8("TT_window"));
+        TT_window->setStyleSheet(QString::fromUtf8("border: 0px solid black"));
+        TT_window->setWidgetResizable(true);
         scrollAreaWidgetContents_4 = new QWidget();
         scrollAreaWidgetContents_4->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_4"));
-        scrollAreaWidgetContents_4->setGeometry(QRect(0, 0, 816, 493));
-        scrollArea_4->setWidget(scrollAreaWidgetContents_4);
+        scrollAreaWidgetContents_4->setGeometry(QRect(0, 0, 820, 497));
+        QSizePolicy sizePolicy5(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(scrollAreaWidgetContents_4->sizePolicy().hasHeightForWidth());
+        scrollAreaWidgetContents_4->setSizePolicy(sizePolicy5);
+        gridLayout_5 = new QGridLayout(scrollAreaWidgetContents_4);
+        gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
+        gridLayout_5->setContentsMargins(0, 0, 0, 0);
+        tt_histo = new QCustomPlot(scrollAreaWidgetContents_4);
+        tt_histo->setObjectName(QString::fromUtf8("tt_histo"));
+        sizePolicy5.setHeightForWidth(tt_histo->sizePolicy().hasHeightForWidth());
+        tt_histo->setSizePolicy(sizePolicy5);
+        tt_histo->setStyleSheet(QString::fromUtf8("border: 0.5px solid black;"));
+        tt_Median = new QLineEdit(tt_histo);
+        tt_Median->setObjectName(QString::fromUtf8("tt_Median"));
+        tt_Median->setGeometry(QRect(75, 15, 91, 16));
+        tt_Median->setStyleSheet(QString::fromUtf8("border: 0.0px solid black;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"background-color: rgba(0, 0, 0, 20);\n"
+"color: rgb(0, 0, 0);\n"
+"\n"
+""));
+        tt_Dev = new QLineEdit(tt_histo);
+        tt_Dev->setObjectName(QString::fromUtf8("tt_Dev"));
+        tt_Dev->setGeometry(QRect(75, 30, 91, 16));
+        tt_Dev->setStyleSheet(QString::fromUtf8("border: 0.0px solid black;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"background-color: rgba(0, 0, 0, 20);\n"
+"color: rgb(0, 0, 0);\n"
+"\n"
+""));
 
-        gridLayout->addWidget(scrollArea_4, 3, 2, 1, 1);
+        gridLayout_5->addWidget(tt_histo, 0, 0, 1, 1);
 
-        scrollArea = new QScrollArea(histograms);
-        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
-        scrollArea->setEnabled(true);
-        scrollArea->setMinimumSize(QSize(51, 0));
-        scrollArea->setStyleSheet(QString::fromUtf8("border: 2px solid black"));
-        scrollArea->setWidgetResizable(true);
+        TT_window->setWidget(scrollAreaWidgetContents_4);
+
+        gridLayout->addWidget(TT_window, 3, 2, 1, 1);
+
+        area_window = new QScrollArea(histograms);
+        area_window->setObjectName(QString::fromUtf8("area_window"));
+        area_window->setEnabled(true);
+        area_window->setMinimumSize(QSize(51, 0));
+        area_window->setStyleSheet(QString::fromUtf8("border: 0px solid black"));
+        area_window->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 816, 494));
-        scrollArea->setWidget(scrollAreaWidgetContents);
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 820, 498));
+        sizePolicy5.setHeightForWidth(scrollAreaWidgetContents->sizePolicy().hasHeightForWidth());
+        scrollAreaWidgetContents->setSizePolicy(sizePolicy5);
+        gridLayout_2 = new QGridLayout(scrollAreaWidgetContents);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        gridLayout_2->setContentsMargins(0, 0, 0, 0);
+        area_histo = new QCustomPlot(scrollAreaWidgetContents);
+        area_histo->setObjectName(QString::fromUtf8("area_histo"));
+        sizePolicy5.setHeightForWidth(area_histo->sizePolicy().hasHeightForWidth());
+        area_histo->setSizePolicy(sizePolicy5);
+        area_histo->setStyleSheet(QString::fromUtf8("border: 0.5px solid black;"));
+        area_Median = new QLineEdit(area_histo);
+        area_Median->setObjectName(QString::fromUtf8("area_Median"));
+        area_Median->setEnabled(false);
+        area_Median->setGeometry(QRect(75, 15, 91, 16));
+        sizePolicy4.setHeightForWidth(area_Median->sizePolicy().hasHeightForWidth());
+        area_Median->setSizePolicy(sizePolicy4);
+        area_Median->setStyleSheet(QString::fromUtf8("border: 0.0px solid black;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"background-color: rgba(0, 0, 0, 20);\n"
+"color: rgb(0, 0, 0);\n"
+""));
+        area_Dev = new QLineEdit(area_histo);
+        area_Dev->setObjectName(QString::fromUtf8("area_Dev"));
+        area_Dev->setEnabled(false);
+        area_Dev->setGeometry(QRect(75, 30, 91, 16));
+        sizePolicy4.setHeightForWidth(area_Dev->sizePolicy().hasHeightForWidth());
+        area_Dev->setSizePolicy(sizePolicy4);
+        QFont font;
+        font.setFamily(QString::fromUtf8("MS Shell Dlg 2"));
+        font.setPointSize(8);
+        font.setBold(false);
+        font.setItalic(false);
+        font.setWeight(50);
+        area_Dev->setFont(font);
+        area_Dev->setContextMenuPolicy(Qt::ActionsContextMenu);
+        area_Dev->setStyleSheet(QString::fromUtf8("border: 0.0px solid black;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"background-color: rgba(0, 0, 0, 20);\n"
+"color: rgb(0, 0, 0);\n"
+"\n"
+""));
 
-        gridLayout->addWidget(scrollArea, 2, 1, 1, 1);
+        gridLayout_2->addWidget(area_histo, 0, 0, 1, 1);
 
-        scrollArea_2 = new QScrollArea(histograms);
-        scrollArea_2->setObjectName(QString::fromUtf8("scrollArea_2"));
-        scrollArea_2->setStyleSheet(QString::fromUtf8("border: 2px solid black"));
-        scrollArea_2->setWidgetResizable(true);
+        area_window->setWidget(scrollAreaWidgetContents);
+
+        gridLayout->addWidget(area_window, 2, 1, 1, 1);
+
+        peak_window = new QScrollArea(histograms);
+        peak_window->setObjectName(QString::fromUtf8("peak_window"));
+        peak_window->setStyleSheet(QString::fromUtf8("border: 0px solid black"));
+        peak_window->setWidgetResizable(true);
         scrollAreaWidgetContents_2 = new QWidget();
         scrollAreaWidgetContents_2->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_2"));
-        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 816, 494));
-        scrollArea_2->setWidget(scrollAreaWidgetContents_2);
+        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 820, 498));
+        sizePolicy5.setHeightForWidth(scrollAreaWidgetContents_2->sizePolicy().hasHeightForWidth());
+        scrollAreaWidgetContents_2->setSizePolicy(sizePolicy5);
+        gridLayout_3 = new QGridLayout(scrollAreaWidgetContents_2);
+        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        gridLayout_3->setContentsMargins(0, 0, 0, 0);
+        peak_histo = new QCustomPlot(scrollAreaWidgetContents_2);
+        peak_histo->setObjectName(QString::fromUtf8("peak_histo"));
+        sizePolicy5.setHeightForWidth(peak_histo->sizePolicy().hasHeightForWidth());
+        peak_histo->setSizePolicy(sizePolicy5);
+        QFont font1;
+        font1.setStyleStrategy(QFont::NoAntialias);
+        peak_histo->setFont(font1);
+        peak_histo->setStyleSheet(QString::fromUtf8("border: 0.5px solid black;"));
+        peak_Median = new QLineEdit(peak_histo);
+        peak_Median->setObjectName(QString::fromUtf8("peak_Median"));
+        peak_Median->setGeometry(QRect(75, 15, 91, 16));
+        peak_Median->setStyleSheet(QString::fromUtf8("border: 0.0px solid black;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"background-color: rgba(0, 0, 0, 20);\n"
+"color: rgb(0, 0, 0);\n"
+""));
+        peak_Dev = new QLineEdit(peak_histo);
+        peak_Dev->setObjectName(QString::fromUtf8("peak_Dev"));
+        peak_Dev->setGeometry(QRect(75, 30, 91, 16));
+        peak_Dev->setStyleSheet(QString::fromUtf8("border: 0.0px solid black;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"background-color: rgba(0, 0, 0, 20);\n"
+"color: rgb(0, 0, 0);\n"
+"\n"
+""));
 
-        gridLayout->addWidget(scrollArea_2, 2, 2, 1, 1);
+        gridLayout_3->addWidget(peak_histo, 0, 0, 1, 1);
+
+        peak_window->setWidget(scrollAreaWidgetContents_2);
+
+        gridLayout->addWidget(peak_window, 2, 2, 1, 1);
 
         m_histoSettings = new QWidget(histograms);
         m_histoSettings->setObjectName(QString::fromUtf8("m_histoSettings"));
         sizePolicy1.setHeightForWidth(m_histoSettings->sizePolicy().hasHeightForWidth());
         m_histoSettings->setSizePolicy(sizePolicy1);
-        m_histoSettings->setMinimumSize(QSize(720, 55));
+        m_histoSettings->setMinimumSize(QSize(820, 55));
         m_histoSettings->setStyleSheet(QString::fromUtf8("border-color: rgb(255, 255, 255);\n"
 "border: 2px solid black\n"
 "\n"
@@ -502,7 +650,7 @@ public:
         m_bRstCounter->setMinimumSize(QSize(40, 0));
         m_cbTextFileSave = new QCheckBox(m_histoSettings);
         m_cbTextFileSave->setObjectName(QString::fromUtf8("m_cbTextFileSave"));
-        m_cbTextFileSave->setGeometry(QRect(590, 10, 87, 16));
+        m_cbTextFileSave->setGeometry(QRect(710, 10, 87, 16));
         m_cbTextFileSave->setStyleSheet(QString::fromUtf8("border: 0px solid black;\n"
 "text-decoration: underline;\n"
 "font: 8pt \"MS Shell Dlg 2\";\n"
@@ -590,35 +738,83 @@ public:
         m_vEvtThrs->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
         m_vEvtThrs->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         m_vEvtThrs->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
-        m_vUpdateFreq = new QTextEdit(m_histoSettings);
+        m_vUpdateFreq = new QSpinBox(m_histoSettings);
         m_vUpdateFreq->setObjectName(QString::fromUtf8("m_vUpdateFreq"));
         m_vUpdateFreq->setGeometry(QRect(230, 30, 51, 17));
-        sizePolicy3.setHeightForWidth(m_vUpdateFreq->sizePolicy().hasHeightForWidth());
-        m_vUpdateFreq->setSizePolicy(sizePolicy3);
-        m_vUpdateFreq->setLayoutDirection(Qt::LeftToRight);
-        m_vUpdateFreq->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
-        m_vUpdateFreq->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        m_vUpdateFreq->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
+        m_vUpdateFreq->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        m_vUpdateFreq->setMinimum(25);
+        m_vUpdateFreq->setMaximum(10000000);
+        m_channel_1 = new QRadioButton(m_histoSettings);
+        m_channel_1->setObjectName(QString::fromUtf8("m_channel_1"));
+        m_channel_1->setGeometry(QRect(580, 10, 82, 17));
+        m_channel_1->setStyleSheet(QString::fromUtf8("border: 0px solid black;\n"
+"text-decoration: underline;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"color: rgb(0, 0, 0);"));
+        m_channel_1->setChecked(true);
+        m_channel_2 = new QRadioButton(m_histoSettings);
+        m_channel_2->setObjectName(QString::fromUtf8("m_channel_2"));
+        m_channel_2->setGeometry(QRect(580, 30, 82, 17));
+        m_channel_2->setStyleSheet(QString::fromUtf8("border: 0px solid black;\n"
+"text-decoration: underline;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"color: rgb(0, 0, 0);"));
 
         gridLayout->addWidget(m_histoSettings, 0, 1, 1, 2);
 
-        scrollArea_3 = new QScrollArea(histograms);
-        scrollArea_3->setObjectName(QString::fromUtf8("scrollArea_3"));
-        scrollArea_3->setStyleSheet(QString::fromUtf8("border: 2px solid black"));
-        scrollArea_3->setWidgetResizable(true);
+        intencity_window = new QScrollArea(histograms);
+        intencity_window->setObjectName(QString::fromUtf8("intencity_window"));
+        intencity_window->setStyleSheet(QString::fromUtf8("border: 0px solid black"));
+        intencity_window->setWidgetResizable(true);
         scrollAreaWidgetContents_3 = new QWidget();
         scrollAreaWidgetContents_3->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_3"));
-        scrollAreaWidgetContents_3->setGeometry(QRect(0, 0, 816, 493));
-        scrollArea_3->setWidget(scrollAreaWidgetContents_3);
+        scrollAreaWidgetContents_3->setGeometry(QRect(0, 0, 820, 497));
+        sizePolicy5.setHeightForWidth(scrollAreaWidgetContents_3->sizePolicy().hasHeightForWidth());
+        scrollAreaWidgetContents_3->setSizePolicy(sizePolicy5);
+        gridLayout_4 = new QGridLayout(scrollAreaWidgetContents_3);
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        gridLayout_4->setContentsMargins(0, 0, 0, 0);
+        intensity_histo = new QCustomPlot(scrollAreaWidgetContents_3);
+        intensity_histo->setObjectName(QString::fromUtf8("intensity_histo"));
+        sizePolicy5.setHeightForWidth(intensity_histo->sizePolicy().hasHeightForWidth());
+        intensity_histo->setSizePolicy(sizePolicy5);
+        intensity_histo->setLayoutDirection(Qt::LeftToRight);
+        intensity_histo->setStyleSheet(QString::fromUtf8("border: 0.5px solid black;"));
+        intensity_Dev = new QLineEdit(intensity_histo);
+        intensity_Dev->setObjectName(QString::fromUtf8("intensity_Dev"));
+        intensity_Dev->setEnabled(false);
+        intensity_Dev->setGeometry(QRect(75, 15, 91, 16));
+        sizePolicy1.setHeightForWidth(intensity_Dev->sizePolicy().hasHeightForWidth());
+        intensity_Dev->setSizePolicy(sizePolicy1);
+        intensity_Dev->setStyleSheet(QString::fromUtf8("border: 0.0px solid black;\n"
+"background-color: rgba(0, 0, 0, 20);\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"color: rgb(0, 0, 0);"));
+        intensity_Dev->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+        intensity_Median = new QLineEdit(intensity_histo);
+        intensity_Median->setObjectName(QString::fromUtf8("intensity_Median"));
+        intensity_Median->setEnabled(false);
+        intensity_Median->setGeometry(QRect(75, 30, 91, 16));
+        sizePolicy1.setHeightForWidth(intensity_Median->sizePolicy().hasHeightForWidth());
+        intensity_Median->setSizePolicy(sizePolicy1);
+        intensity_Median->setStyleSheet(QString::fromUtf8("border: 0.0px solid black;\n"
+"font: 8pt \"MS Shell Dlg 2\";\n"
+"background-color: rgba(0, 0, 0, 20);\n"
+"color: rgb(0, 0, 0);\n"
+""));
 
-        gridLayout->addWidget(scrollArea_3, 3, 1, 1, 1);
+        gridLayout_4->addWidget(intensity_histo, 0, 0, 1, 1);
 
-        scrollArea->raise();
-        scrollArea_2->raise();
-        scrollArea_4->raise();
-        scrollArea_3->raise();
+        intencity_window->setWidget(scrollAreaWidgetContents_3);
+
+        gridLayout->addWidget(intencity_window, 3, 1, 1, 1);
+
         m_histoSettings->raise();
         frame->raise();
+        area_window->raise();
+        peak_window->raise();
+        TT_window->raise();
+        intencity_window->raise();
 
         retranslateUi(histograms);
 
@@ -700,6 +896,15 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">0</p></body></html>", nullptr));
+        m_bUTISet->setText(QApplication::translate("histograms", "Set", nullptr));
+        m_bUPISet->setText(QApplication::translate("histograms", "Set", nullptr));
+        m_bSumOfIntTTSet->setText(QApplication::translate("histograms", "Set", nullptr));
+        tt_Median->setText(QApplication::translate("histograms", "M:0", nullptr));
+        tt_Dev->setText(QApplication::translate("histograms", "D:0", nullptr));
+        area_Median->setText(QApplication::translate("histograms", "M:0", nullptr));
+        area_Dev->setText(QApplication::translate("histograms", "D:0", nullptr));
+        peak_Median->setText(QApplication::translate("histograms", "M:0", nullptr));
+        peak_Dev->setText(QApplication::translate("histograms", "D:0", nullptr));
         m_bGetInstADCVal->setText(QApplication::translate("histograms", "Get", nullptr));
         m_bSetEventThr->setText(QApplication::translate("histograms", "Set", nullptr));
         m_vEventElapsed->setText(QApplication::translate("histograms", "0", nullptr));
@@ -723,11 +928,10 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">0</p></body></html>", nullptr));
-        m_vUpdateFreq->setHtml(QApplication::translate("histograms", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">0</p></body></html>", nullptr));
+        m_channel_1->setText(QApplication::translate("histograms", "Channel - 1", nullptr));
+        m_channel_2->setText(QApplication::translate("histograms", "Channel - 2", nullptr));
+        intensity_Dev->setText(QApplication::translate("histograms", "D:0", nullptr));
+        intensity_Median->setText(QApplication::translate("histograms", "M:0", nullptr));
     } // retranslateUi
 
 };

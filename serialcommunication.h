@@ -33,20 +33,23 @@ using namespace std;
 class serialCommunication : public CommunicationIF, public std::enable_shared_from_this<serialCommunication>
 {
 
+    std::function<void(struct serialReadData *)> m_updateReadData;
     std::shared_ptr<QSerialPort> m_device;
     bool m_isRunning;
+    bool m_waitEnable;
     dataCallback_t m_dataCallback;
     SettingsPtr m_settings;
     std::shared_ptr<serialConfiguration> m_serial_configurations;
     std::thread parserThread;
     std::mutex m_lock;
+    uint16_t m_channel;
+    std::mutex cv_mtx;
+    std::condition_variable m_cv;
 
 
 
     QVector<double> m_tmp;
     void parser(void);
-    void clearProcessData(void);
-
     /**
          * @brief GetBaudRateStr
          * @param baudrate
@@ -156,18 +159,6 @@ public:
     void ParseData();
 
     /**
-     * @brief getData
-     * @param type
-     */
-    void getData(dataType type);
-
-    /**
-     * @brief parseStatus
-     * @param status
-     */
-    void parseStatus(uint8_t status);
-
-    /**
      * @brief sendCommand
      * @param commandMetaData
      * @return
@@ -184,7 +175,7 @@ public:
      * @brief cGetSerialStatus
      * @return
      */
-    bool cGetSerialStatus(void);
+    bool cGetSerialStatus(bool enable);
 
     /**
      * @brief cSetEventThr
@@ -192,6 +183,68 @@ public:
      */
     bool cSetEventThr(int val);
 
+    /**
+     * @brief registerForData
+     * @param cbDataCallback
+     */
+    void registerForData(std::function<void(struct serialReadData *)> cbDataCallback);
+
+    /**
+     * @brief cSetEventThr
+     * @param val
+     */
+    bool cEnabledHisto(bool enable);
+
+    /**
+     * @brief cSetTTThr
+     * @param upperThr
+     * @param lowerThr
+     * @return
+     */
+    bool cSetTTThr(int upperThr, int lowerThr);
+
+    /**
+     * @brief cEnabledTTThr
+     * @param enable
+     * @return
+     */
+    bool cEnabledTTThr(bool enable);
+
+    /**
+     * @brief cSetAblationThr
+     * @param upperThr
+     * @param lowerThr
+     * @return
+     */
+    bool cSetAblationThr(int val);
+
+    /**
+     * @brief cEnabledAblationThr
+     * @param enable
+     * @return
+     */
+    bool cEnabledAblationThr(bool enable);
+
+    /**
+     * @brief cSetPeakIntensityThr
+     * @param upperThr
+     * @param lowerThr
+     * @return
+     */
+    bool cSetPeakIntensityThr(int upperThr, int lowerThr);
+
+    /**
+     * @brief cEnabledPeakIntensityThr
+     * @param enable
+     * @return
+     */
+    bool cEnabledPeakIntensityThr(bool enable);
+
+
+    /**
+     * @brief setCurrentChannel
+     */
+    void setCurrentChannel(uint16_t channel);
 };
 
 #endif // SERIALCOMMUNICATION_H
